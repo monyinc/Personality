@@ -18,7 +18,7 @@ export const PROVIDER_META: Record<ProviderId, ProviderMeta> = {
     defaultModel: "gpt-5",
     modelHint: "e.g. gpt-5, gpt-5-mini",
     corsNote:
-      "OpenAI's API does not officially support direct browser calls — this may fail with a CORS error even with a valid key.",
+      "OpenAI's API does not officially support direct browser calls. This may fail with a CORS error even with a valid key.",
     keyPlaceholder: "sk-…",
   },
   gemini: {
@@ -32,7 +32,7 @@ export const PROVIDER_META: Record<ProviderId, ProviderMeta> = {
     label: "OpenRouter",
     defaultModel: "openai/gpt-5",
     modelHint: "any OpenRouter model id, e.g. anthropic/claude-sonnet-5, meta-llama/llama-4",
-    corsNote: "Built for browser apps — routes to almost any model with one key.",
+    corsNote: "Built for browser apps, routes to almost any model with one key.",
     keyPlaceholder: "sk-or-…",
   },
 };

@@ -13,13 +13,13 @@ export function TraitReadout({ traits, text }: { traits: TraitValues; text: stri
             <span className="w-9 shrink-0 text-[9px] font-mono text-(--color-text-low)">
               {TRAITS[id].tag}
             </span>
-            <div className="relative flex-1 h-2 rounded-full bg-(--color-console) border border-(--color-hairline) overflow-hidden">
+            <div className="relative flex-1 h-2 rounded-full bg-(--color-bg) border border-(--color-border) overflow-hidden">
               <div
-                className="absolute inset-y-0 left-0 bg-(--color-teal) opacity-70"
+                className="absolute inset-y-0 left-0 bg-(--color-fill-muted)"
                 style={{ width: `${r.measured}%` }}
               />
               <div
-                className="absolute top-0 bottom-0 w-0.5 bg-(--color-amber)"
+                className="absolute top-0 bottom-0 w-0.5 bg-(--color-text)"
                 style={{ left: `${r.intended}%` }}
                 title={`dialed to ${r.intended}`}
               />
@@ -28,8 +28,7 @@ export function TraitReadout({ traits, text }: { traits: TraitValues; text: stri
         );
       })}
       <p className="text-[10px] text-(--color-text-low) pt-1">
-        <span className="text-(--color-amber)">▮</span> dialed position &nbsp;
-        <span className="text-(--color-teal)">▮</span> measured in this response (heuristic estimate)
+        Black mark: dialed position. Grey fill: measured in this response (heuristic estimate).
       </p>
     </div>
   );

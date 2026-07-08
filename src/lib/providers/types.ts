@@ -23,7 +23,7 @@ export async function safeFetch(
     return await fetch(input, init);
   } catch (err) {
     throw new Error(
-      `${providerLabel} request failed before reaching the server — this is almost always the browser blocking a cross-origin request (CORS), not a bad key. ${
+      `${providerLabel} request failed before reaching the server. This is almost always the browser blocking a cross-origin request (CORS), not a bad key. ${
         err instanceof Error ? err.message : String(err)
       }`,
     );

@@ -12,26 +12,26 @@ export function SettingsModal() {
 
   return (
     <div
-      className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4"
+      className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4"
       onClick={close}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-lg bg-(--color-panel) border border-(--color-hairline-bright) rounded-sm shadow-2xl"
+        className="w-full max-w-lg bg-(--color-bg) border border-(--color-border-strong) rounded-sm shadow-2xl"
       >
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-(--color-hairline)">
+        <div className="flex items-center justify-between px-5 py-3.5 border-b border-(--color-border)">
           <h2 className="font-display text-lg font-semibold uppercase tracking-wide">
             Provider keys
           </h2>
-          <button onClick={close} className="text-(--color-text-low) hover:text-(--color-text-hi) cursor-pointer text-lg leading-none">
-            ✕
+          <button onClick={close} className="text-(--color-text-low) hover:text-(--color-text) cursor-pointer text-[11px] underline underline-offset-2">
+            Close
           </button>
         </div>
 
         <div className="px-5 py-4 space-y-5 max-h-[70vh] overflow-auto">
           <p className="text-[12px] text-(--color-text-mid) leading-relaxed">
             Keys are stored only in this browser's local storage and sent directly from your
-            browser to each provider's API — never through any server of ours (this app has none;
+            browser to each provider's API, never through any server of ours (this app has none,
             it's static).
           </p>
 
@@ -39,7 +39,7 @@ export function SettingsModal() {
             const meta = PROVIDER_META[p];
             const cfg = providerSettings[p];
             return (
-              <div key={p} className="border border-(--color-hairline) rounded-sm p-3.5">
+              <div key={p} className="border border-(--color-border) rounded-sm p-3.5">
                 <div className="flex items-baseline justify-between mb-2">
                   <span className="font-display font-semibold uppercase tracking-wide text-[13px]">
                     {meta.label}
@@ -55,7 +55,7 @@ export function SettingsModal() {
                     value={cfg.apiKey}
                     onChange={(e) => setProviderConfig(p, { apiKey: e.target.value })}
                     placeholder={meta.keyPlaceholder}
-                    className="w-full bg-(--color-console) border border-(--color-hairline) rounded-sm px-2.5 py-1.5 text-[12.5px] font-mono outline-none focus:border-(--color-amber)"
+                    className="w-full bg-(--color-bg) border border-(--color-border) rounded-sm px-2.5 py-1.5 text-[12.5px] font-mono outline-none focus:border-(--color-text)"
                   />
                 </label>
                 <label className="block">
@@ -66,7 +66,7 @@ export function SettingsModal() {
                     value={cfg.model}
                     onChange={(e) => setProviderConfig(p, { model: e.target.value })}
                     placeholder={meta.modelHint}
-                    className="w-full bg-(--color-console) border border-(--color-hairline) rounded-sm px-2.5 py-1.5 text-[12.5px] font-mono outline-none focus:border-(--color-amber)"
+                    className="w-full bg-(--color-bg) border border-(--color-border) rounded-sm px-2.5 py-1.5 text-[12.5px] font-mono outline-none focus:border-(--color-text)"
                   />
                 </label>
                 <p className="text-[10px] text-(--color-text-low) mt-1">{meta.modelHint}</p>

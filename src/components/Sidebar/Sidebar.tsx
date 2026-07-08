@@ -12,7 +12,7 @@ export function Sidebar() {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="px-4 py-3 border-b border-(--color-hairline)">
+      <div className="px-4 py-3 border-b border-(--color-border)">
         <span className="label-eyebrow text-[11px] text-(--color-text-low)">Tracks</span>
       </div>
       <div className="flex-1 overflow-auto">
@@ -23,27 +23,23 @@ export function Sidebar() {
             <div
               key={t.id}
               onClick={() => setActiveTrack(t.id)}
-              className={`group flex items-center gap-2 px-4 py-2.5 border-b border-(--color-hairline) cursor-pointer ${
-                active ? "bg-(--color-panel)" : "hover:bg-(--color-console-raised)"
+              className={`group flex items-center gap-2 px-4 py-2.5 border-b border-(--color-border) cursor-pointer ${
+                active ? "bg-(--color-surface-raised)" : "hover:bg-(--color-surface)"
               }`}
             >
-              <span
-                className="w-2 h-2 rounded-full shrink-0"
-                style={{ background: t.color, boxShadow: active ? `0 0 6px ${t.color}` : "none" }}
-              />
-              <span className={`flex-1 truncate text-[13px] ${active ? "text-(--color-text-hi)" : "text-(--color-text-mid)"}`}>
+              <span className={`flex-1 truncate text-[13px] ${active ? "text-(--color-text) font-semibold" : "text-(--color-text-mid)"}`}>
                 {t.name}
               </span>
               <button
-                title="Add to A/B comparison"
+                title="Add to comparison"
                 onClick={(e) => {
                   e.stopPropagation();
                   toggleComparisonTrack(t.id);
                 }}
                 className={`text-[10px] font-mono px-1.5 py-0.5 rounded-sm border shrink-0 cursor-pointer ${
                   inComparison
-                    ? "border-(--color-teal) text-(--color-teal)"
-                    : "border-(--color-hairline) text-(--color-text-low) opacity-0 group-hover:opacity-100"
+                    ? "border-(--color-text) text-(--color-text)"
+                    : "border-(--color-border) text-(--color-text-low) opacity-0 group-hover:opacity-100"
                 }`}
               >
                 AB
@@ -54,9 +50,9 @@ export function Sidebar() {
                   e.stopPropagation();
                   duplicateTrack(t.id);
                 }}
-                className="text-(--color-text-low) hover:text-(--color-amber) opacity-0 group-hover:opacity-100 shrink-0 cursor-pointer text-[13px] leading-none"
+                className="text-(--color-text-low) hover:text-(--color-text) opacity-0 group-hover:opacity-100 shrink-0 cursor-pointer text-[11px] underline underline-offset-2"
               >
-                ⎘
+                Duplicate
               </button>
               <button
                 title="Delete track"
@@ -64,9 +60,9 @@ export function Sidebar() {
                   e.stopPropagation();
                   if (tracks.length > 1) deleteTrack(t.id);
                 }}
-                className="text-(--color-text-low) hover:text-(--color-red) opacity-0 group-hover:opacity-100 shrink-0 cursor-pointer text-[13px] leading-none"
+                className="text-(--color-text-low) hover:text-(--color-text) opacity-0 group-hover:opacity-100 shrink-0 cursor-pointer text-[11px] underline underline-offset-2"
               >
-                ✕
+                Delete
               </button>
             </div>
           );
@@ -74,9 +70,9 @@ export function Sidebar() {
       </div>
       <button
         onClick={addTrack}
-        className="px-4 py-3 border-t border-(--color-hairline) text-left label-eyebrow text-[11px] text-(--color-text-low) hover:text-(--color-amber) cursor-pointer"
+        className="px-4 py-3 border-t border-(--color-border) text-left label-eyebrow text-[11px] text-(--color-text-low) hover:text-(--color-text) cursor-pointer"
       >
-        + New track
+        Add track
       </button>
     </div>
   );

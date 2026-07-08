@@ -81,18 +81,18 @@ export function PlaygroundPanel() {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center gap-4 px-5 py-3 border-b border-(--color-hairline) flex-wrap">
+      <div className="flex items-center gap-4 px-5 py-3 border-b border-(--color-border) flex-wrap">
         <span className="label-eyebrow text-[11px] text-(--color-text-low)">Playground</span>
 
-        <div className="flex rounded-sm border border-(--color-hairline) overflow-hidden">
+        <div className="flex rounded-sm border border-(--color-border) overflow-hidden">
           {(["single", "multitrack"] as Mode[]).map((m) => (
             <button
               key={m}
               onClick={() => setMode(m)}
               className={`px-2.5 py-1 text-[11px] font-mono cursor-pointer ${
                 mode === m
-                  ? "bg-(--color-amber) text-(--color-console) font-semibold"
-                  : "text-(--color-text-mid) hover:bg-(--color-console-raised)"
+                  ? "bg-(--color-fill) text-(--color-bg) font-semibold"
+                  : "text-(--color-text-mid) hover:bg-(--color-surface)"
               }`}
             >
               {m === "single" ? "Single" : "Multitrack A/B"}
@@ -104,7 +104,7 @@ export function PlaygroundPanel() {
           <select
             value={selectedProvider}
             onChange={(e) => setSelectedProvider(e.target.value as ProviderId)}
-            className="bg-(--color-console) border border-(--color-hairline) rounded-sm text-[11px] font-mono px-2 py-1 outline-none"
+            className="bg-(--color-bg) border border-(--color-border) rounded-sm text-[11px] font-mono px-2 py-1 outline-none"
           >
             {(Object.keys(PROVIDER_META) as ProviderId[]).map((p) => (
               <option key={p} value={p}>
@@ -114,22 +114,22 @@ export function PlaygroundPanel() {
           </select>
           <button
             onClick={openSettings}
-            className="text-[11px] font-mono text-(--color-text-low) hover:text-(--color-amber) cursor-pointer"
+            className="text-[11px] font-mono text-(--color-text-low) hover:text-(--color-text) cursor-pointer underline underline-offset-2"
           >
-            keys ⚙
+            Settings
           </button>
         </div>
       </div>
 
       {mode === "multitrack" && (
-        <div className="px-5 py-2 border-b border-(--color-hairline) text-[11px] text-(--color-text-low)">
+        <div className="px-5 py-2 border-b border-(--color-border) text-[11px] text-(--color-text-low)">
           {comparisonTrackIds.length === 0
             ? "Mark tracks with the \"AB\" button in the sidebar to include them here."
             : `Comparing ${comparisonTrackIds.length} track${comparisonTrackIds.length > 1 ? "s" : ""}.`}
         </div>
       )}
 
-      <div className="px-5 py-3 border-b border-(--color-hairline) flex flex-wrap gap-1.5">
+      <div className="px-5 py-3 border-b border-(--color-border) flex flex-wrap gap-1.5">
         {scenarios.map((s) => (
           <button
             key={s.id}
@@ -139,8 +139,8 @@ export function PlaygroundPanel() {
             }}
             className={`text-[11px] px-2.5 py-1 rounded-full border cursor-pointer ${
               scenarioId === s.id && !customMessage
-                ? "border-(--color-amber) text-(--color-amber)"
-                : "border-(--color-hairline) text-(--color-text-mid) hover:border-(--color-hairline-bright)"
+                ? "border-(--color-text) text-(--color-text)"
+                : "border-(--color-border) text-(--color-text-mid) hover:border-(--color-border-strong)"
             }`}
           >
             {s.label}
@@ -148,26 +148,26 @@ export function PlaygroundPanel() {
         ))}
       </div>
 
-      <div className="px-5 py-3 border-b border-(--color-hairline) flex gap-2 items-start">
+      <div className="px-5 py-3 border-b border-(--color-border) flex gap-2 items-start">
         <textarea
           value={customMessage}
           onChange={(e) => setCustomMessage(e.target.value)}
-          placeholder="…or write your own test message"
+          placeholder="Or write your own test message"
           rows={2}
-          className="flex-1 resize-none bg-(--color-console) border border-(--color-hairline) rounded-sm px-3 py-2 text-[13px] outline-none focus:border-(--color-amber) text-(--color-text-hi)"
+          className="flex-1 resize-none bg-(--color-bg) border border-(--color-border) rounded-sm px-3 py-2 text-[13px] outline-none focus:border-(--color-text) text-(--color-text)"
         />
         <div className="flex flex-col gap-1.5">
           <button
             onClick={run}
             disabled={isRunning || !message.trim() || targetTracks.length === 0}
-            className="px-4 py-2 rounded-sm bg-(--color-amber) text-(--color-console) font-display font-semibold uppercase tracking-wide text-[12px] disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+            className="px-4 py-2 rounded-sm bg-(--color-fill) text-(--color-bg) font-display font-semibold uppercase tracking-wide text-[12px] disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
           >
-            {isRunning ? "Running…" : "▶ Run"}
+            {isRunning ? "Running" : "Run"}
           </button>
           {customMessage.trim() && (
             <button
               onClick={saveAsScenario}
-              className="text-[10px] text-(--color-text-low) hover:text-(--color-teal) cursor-pointer"
+              className="text-[10px] text-(--color-text-low) hover:text-(--color-text) cursor-pointer underline underline-offset-2"
             >
               {savingScenario ? "saved" : "save as scenario"}
             </button>
@@ -178,7 +178,7 @@ export function PlaygroundPanel() {
       <div className="flex-1 overflow-auto p-5">
         {results.length === 0 ? (
           <p className="text-[13px] text-(--color-text-low)">
-            No takes yet — pick a scenario or write a message, then hit Run.
+            No takes yet. Pick a scenario or write a message, then hit Run.
           </p>
         ) : (
           <div

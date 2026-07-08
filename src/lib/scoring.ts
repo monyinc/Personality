@@ -3,7 +3,7 @@ import { TRAIT_ORDER } from "./traits";
 
 /**
  * Rough, explainable text heuristics that estimate where a *response* landed
- * on each dial — not ground truth, just a fast proxy so a person can see
+ * on each dial. Not ground truth, just a fast proxy so a person can see
  * whether a fader move actually moved the output before trusting it further.
  */
 

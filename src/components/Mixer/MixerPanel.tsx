@@ -27,27 +27,21 @@ export function MixerPanel({ track }: { track: Track }) {
 
   return (
     <div className="flex flex-col h-full">
-      <div className="flex items-center justify-between gap-3 px-5 py-3 border-b border-(--color-hairline)">
-        <div className="flex items-center gap-3 min-w-0">
-          <span
-            className="inline-block w-2.5 h-2.5 rounded-full shrink-0"
-            style={{ background: track.color, boxShadow: `0 0 8px ${track.color}` }}
-          />
-          <input
-            value={track.name}
-            onChange={(e) => renameTrack(track.id, e.target.value)}
-            className="bg-transparent font-display text-lg font-semibold tracking-wide uppercase outline-none text-(--color-text-hi) min-w-0 w-full"
-          />
-        </div>
+      <div className="flex items-center justify-between gap-3 px-5 py-3 border-b border-(--color-border)">
+        <input
+          value={track.name}
+          onChange={(e) => renameTrack(track.id, e.target.value)}
+          className="bg-transparent font-display text-lg font-semibold tracking-wide uppercase outline-none text-(--color-text) min-w-0 w-full"
+        />
         <button
           onClick={() => resetTraits(track.id)}
-          className="label-eyebrow text-[10px] text-(--color-text-low) hover:text-(--color-amber) shrink-0 cursor-pointer"
+          className="label-eyebrow text-[10px] text-(--color-text-low) hover:text-(--color-text) shrink-0 cursor-pointer"
         >
           Reset
         </button>
       </div>
 
-      <div className="flex-1 overflow-auto px-5 py-6 console-grain">
+      <div className="flex-1 overflow-auto px-5 py-6">
         <div className="flex flex-wrap justify-center gap-x-4 gap-y-6">
           {TRAIT_ORDER.map((id) => {
             const def = TRAITS[id];
@@ -67,13 +61,13 @@ export function MixerPanel({ track }: { track: Track }) {
         </div>
       </div>
 
-      <div className="border-t border-(--color-hairline) bg-(--color-console-raised) px-5 py-4">
+      <div className="border-t border-(--color-border) bg-(--color-surface) px-5 py-4">
         <div className="flex items-center justify-between mb-2">
           <span className="label-eyebrow text-[10px] text-(--color-text-low)">
             System prompt readout
           </span>
           <div className="flex items-center gap-4">
-            <button onClick={handleCopy} className="text-[11px] text-(--color-teal) hover:brightness-125 cursor-pointer font-mono">
+            <button onClick={handleCopy} className="text-[11px] text-(--color-text) underline underline-offset-2 hover:no-underline cursor-pointer font-mono">
               {copied ? "copied" : "copy"}
             </button>
             <label className="flex items-center gap-2 text-[11px] text-(--color-text-mid) cursor-pointer select-none">
@@ -81,7 +75,7 @@ export function MixerPanel({ track }: { track: Track }) {
                 type="checkbox"
                 checked={track.manualOverride}
                 onChange={() => toggleManualOverride(track.id)}
-                className="accent-(--color-amber)"
+                className="accent-(--color-fill)"
               />
               hand-edit override
             </label>
@@ -92,16 +86,16 @@ export function MixerPanel({ track }: { track: Track }) {
             value={track.manualPrompt || generated}
             onChange={(e) => setManualPrompt(track.id, e.target.value)}
             rows={6}
-            className="w-full resize-y rounded-sm bg-(--color-console) border border-(--color-hairline) px-3 py-2 font-mono text-[12.5px] leading-relaxed text-(--color-text-hi) outline-none focus:border-(--color-amber)"
+            className="w-full resize-y rounded-sm bg-(--color-bg) border border-(--color-border) px-3 py-2 font-mono text-[12.5px] leading-relaxed text-(--color-text) outline-none focus:border-(--color-text)"
           />
         ) : (
-          <pre className="w-full max-h-40 overflow-auto rounded-sm bg-(--color-console) border border-(--color-hairline) px-3 py-2 font-mono text-[12.5px] leading-relaxed text-(--color-text-mid) whitespace-pre-wrap">
+          <pre className="w-full max-h-40 overflow-auto rounded-sm bg-(--color-bg) border border-(--color-border) px-3 py-2 font-mono text-[12.5px] leading-relaxed text-(--color-text-mid) whitespace-pre-wrap">
             {generated}
           </pre>
         )}
         {track.manualOverride && (
           <p className="mt-1.5 text-[11px] text-(--color-text-low)">
-            Faders are disengaged while hand-editing — like disabling automation on a channel strip.
+            Faders are disengaged while hand-editing, like disabling automation on a channel strip.
           </p>
         )}
       </div>

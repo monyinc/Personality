@@ -36,12 +36,12 @@ export function Fader({ label, tag, leftLabel, rightLabel, value, onChange, disa
           {/* groove */}
           <div
             className="absolute left-1/2 top-0 bottom-0 -translate-x-1/2 rounded-full"
-            style={{ width: 6, background: "var(--color-console)", boxShadow: "inset 0 0 0 1px var(--color-hairline)" }}
+            style={{ width: 6, background: "var(--color-surface)", boxShadow: "inset 0 0 0 1px var(--color-border-strong)" }}
           />
           {/* center detent */}
           <div
             className="absolute left-1/2 -translate-x-1/2 rounded-full"
-            style={{ top: center - 1, width: 14, height: 2, background: "var(--color-hairline-bright)" }}
+            style={{ top: center - 1, width: 14, height: 2, background: "var(--color-border-strong)" }}
           />
           {/* fill from center toward current value */}
           <div
@@ -50,8 +50,8 @@ export function Fader({ label, tag, leftLabel, rightLabel, value, onChange, disa
               bottom: fillBottom,
               height: Math.max(2, fillHeight),
               width: 6,
-              background: "var(--color-amber)",
-              opacity: 0.25 + intensity * 0.75,
+              background: "var(--color-fill)",
+              opacity: 0.3 + intensity * 0.7,
             }}
           />
           <input
@@ -81,8 +81,7 @@ export function Fader({ label, tag, leftLabel, rightLabel, value, onChange, disa
       </div>
 
       <div
-        className="label-eyebrow text-[11px]"
-        style={{ color: deviated ? "var(--color-amber)" : "var(--color-text-low)" }}
+        className={`label-eyebrow text-[11px] text-(--color-text) ${deviated ? "" : "opacity-40"}`}
       >
         {tag}
       </div>

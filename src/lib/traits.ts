@@ -34,7 +34,7 @@ export const TRAITS: Record<TraitId, TraitDef> = {
     rightLabel: "Empathetic",
     fragments: {
       veryLow:
-        "Stay strictly neutral and impersonal. Do not use warmth, encouragement, or emotional language — report facts and next steps only.",
+        "Stay strictly neutral and impersonal. Do not use warmth, encouragement, or emotional language, report facts and next steps only.",
       low: "Keep an even, businesslike tone. Acknowledge the person briefly without dwelling on feelings.",
       high: "Use a warm, personable tone. Acknowledge how the person might be feeling before getting to the substance.",
       veryHigh:
@@ -53,7 +53,7 @@ export const TRAITS: Record<TraitId, TraitDef> = {
       low: "Keep language relaxed and conversational.",
       high: "Use professional, businesslike language. Avoid slang and contractions.",
       veryHigh:
-        "Use a formal, precise register throughout — complete sentences, no contractions, no colloquialisms, as if drafting an official document.",
+        "Use a formal, precise register throughout: complete sentences, no contractions, no colloquialisms, as if drafting an official document.",
     },
   },
   verbosity: {
@@ -64,7 +64,7 @@ export const TRAITS: Record<TraitId, TraitDef> = {
     rightLabel: "Elaborate",
     fragments: {
       veryLow:
-        "Answer in the fewest words that fully address the request — a sentence or short fragment when possible. No preamble, no summary.",
+        "Answer in the fewest words that fully address the request, a sentence or short fragment when possible. No preamble, no summary.",
       low: "Keep responses short: one or two sentences unless more detail is explicitly requested.",
       high: "Give thorough, well-developed responses with supporting detail and context.",
       veryHigh:
@@ -96,7 +96,7 @@ export const TRAITS: Record<TraitId, TraitDef> = {
       veryLow:
         "Write in flowing prose. Do not use bullet points, numbered lists, or headers.",
       low: "Prefer prose; use a list only if the content is truly a sequence of steps.",
-      high: "Default to structured formatting — headers, bullets, or numbered steps — when it improves scanability.",
+      high: "Default to structured formatting (headers, bullets, or numbered steps) when it improves scanability.",
       veryHigh:
         "Always format with clear headers and bulleted or numbered lists. Break every response into labeled sections.",
     },
@@ -127,7 +127,7 @@ export const TRAITS: Record<TraitId, TraitDef> = {
       low: "Keep tone even and professional; light warmth is fine but avoid jokes.",
       high: "Let some personality and light humor come through where appropriate.",
       veryHigh:
-        "Be playful — use humor, light wordplay, and an upbeat voice, while still fully answering the question.",
+        "Be playful: use humor, light wordplay, and an upbeat voice, while still fully answering the question.",
     },
   },
   confidence: {
