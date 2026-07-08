@@ -2,28 +2,60 @@ import type { TraitId, TraitValues } from "../types";
 import { TRAIT_ORDER } from "./traits";
 
 /**
- * Rough, explainable text heuristics that estimate where a *response* landed
- * on each dial. Not ground truth, just a fast proxy so a person can see
- * whether a fader move actually moved the output before trusting it further.
+ * Estimates where a *response* landed on each Big Five dial from its text.
+ *
+ * This is a small, hand-built, open word-category lexicon in the style of
+ * LIWC (Linguistic Inquiry and Word Count), not the licensed LIWC dictionary
+ * itself. The *direction* each category is combined in is grounded in
+ * published findings relating language use to the Big Five:
+ *
+ *  - Pennebaker & King (1999), "Linguistic styles: Language use as an
+ *    individual difference marker" — social words and positive emotion
+ *    words track Extraversion and Agreeableness; negations and negative
+ *    emotion words track Neuroticism; tentative/insight language and
+ *    longer words track Openness.
+ *  - Yarkoni (2010), "Personality in 100,000 words" — replicates the
+ *    negative-emotion/Neuroticism and social-word/Extraversion links at
+ *    scale, and ties achievement language to Conscientiousness.
+ *  - Park et al. (2015), "Automatic Personality Assessment Through Social
+ *    Media Language" — corroborates the same five directions in a modern
+ *    large-sample setting.
+ *
+ * The absolute 0-100 scale below is a heuristic calibration, not a fitted
+ * model, so treat a reading as a directional signal (did this dial move
+ * the output at all, and which way), not a validated personality score.
  */
 
-const HEDGE_WORDS = [
-  "might", "could", "perhaps", "possibly", "may", "i think", "i believe",
-  "it's possible", "not entirely sure", "probably", "seems like", "somewhat",
+const POSITIVE_EMOTION = [
+  "happy", "great", "good", "glad", "wonderful", "love", "nice", "enjoy",
+  "pleased", "excited", "delighted", "appreciate", "thank you", "thanks",
+  "awesome", "fantastic",
 ];
-const ASSERTIVE_WORDS = [
-  "definitely", "certainly", "will", "is the", "the answer is", "clearly", "always", "never",
+const NEGATIVE_EMOTION = [
+  "bad", "sad", "angry", "hate", "terrible", "awful", "unfortunately",
+  "sorry", "upset", "frustrat", "annoy",
 ];
-const WARM_WORDS = [
-  "feel", "understand", "here for you", "great job", "no worries", "i'm sorry",
-  "congrat", "appreciate", "that sounds", "you're doing", "thank you for",
+const ANXIETY = [
+  "worried", "worry", "nervous", "anxious", "afraid", "scared", "concern",
+  "risk", "danger", "uncertain", "caution",
 ];
-const PLAYFUL_MARKERS = ["!", "😄", "😊", "🎉", "haha", "lol", ":)", "fun ", "yay"];
-const CONTRACTIONS = ["don't", "can't", "it's", "i'm", "we're", "you're", "that's", "isn't", "won't", "let's"];
-const FORMAL_CONNECTORS = ["furthermore", "in accordance with", "therefore", "hereby", "accordingly", "pursuant"];
-const PROACTIVE_MARKERS = [
-  "you might also", "additionally", "next step", "one thing to consider",
-  "worth noting", "i'd also", "you may want to", "keep in mind",
+const SOCIAL = [
+  "we ", "us ", "our ", "you ", "your ", "someone", "people", "friend",
+  "team", "together", "everyone",
+];
+const ASSENT = ["yes", "agree", "sure", "absolutely", "definitely", "exactly", "right,"];
+const ACHIEVEMENT = [
+  "achieve", "accomplish", "complete", "finish", "succeed", "goal",
+  "milestone", "deliver", "win", "progress",
+];
+const NEGATION = ["not ", "no ", "never", "none", "cannot", "can't", "won't", "don't", "isn't"];
+const TENTATIVE = [
+  "maybe", "perhaps", "might", "could", "possibly", "somewhat", "seem",
+  "appear", "probably", "it's possible",
+];
+const INSIGHT = [
+  "think", "know", "understand", "realize", "consider", "believe",
+  "reason", "because", "therefore", "suggests",
 ];
 
 function clamp(n: number): number {
@@ -34,42 +66,38 @@ function countHits(haystack: string, needles: string[]): number {
   return needles.reduce((n, needle) => n + (haystack.includes(needle) ? 1 : 0), 0);
 }
 
-function wordCount(text: string): number {
-  return text.trim().split(/\s+/).filter(Boolean).length;
-}
-
-function hasListStructure(text: string): boolean {
-  const lines = text.split("\n");
-  const listLines = lines.filter((l) => /^\s*([-*•]|\d+[.)])\s+/.test(l)).length;
-  const headerLines = lines.filter((l) => /^\s*#{1,4}\s+/.test(l)).length;
-  return listLines + headerLines > 0;
+function averageWordLength(text: string): number {
+  const words = text.trim().split(/\s+/).filter(Boolean);
+  if (words.length === 0) return 0;
+  const totalLetters = words.reduce((n, w) => n + w.replace(/[^a-zA-Z]/g, "").length, 0);
+  return totalLetters / words.length;
 }
 
 export function measureTraits(text: string): Partial<TraitValues> {
   const lower = text.toLowerCase();
-  const words = wordCount(text);
-  const listy = hasListStructure(text);
-  const listRatio =
-    text.split("\n").filter((l) => /^\s*([-*•]|\d+[.)]|#{1,4}\s)/.test(l)).length /
-    Math.max(1, text.split("\n").length);
 
-  const hedges = countHits(lower, HEDGE_WORDS);
-  const assertive = countHits(lower, ASSERTIVE_WORDS);
-  const warm = countHits(lower, WARM_WORDS);
-  const playful = countHits(lower, PLAYFUL_MARKERS);
-  const contractions = countHits(lower, CONTRACTIONS);
-  const formalWords = countHits(lower, FORMAL_CONNECTORS);
-  const proactive = countHits(lower, PROACTIVE_MARKERS);
+  const posEmotion = countHits(lower, POSITIVE_EMOTION);
+  const negEmotion = countHits(lower, NEGATIVE_EMOTION);
+  const anxiety = countHits(lower, ANXIETY);
+  const social = countHits(lower, SOCIAL);
+  const assent = countHits(lower, ASSENT);
+  const achievement = countHits(lower, ACHIEVEMENT);
+  const negation = countHits(lower, NEGATION);
+  const tentative = countHits(lower, TENTATIVE);
+  const insight = countHits(lower, INSIGHT);
+  const wordLen = averageWordLength(text);
 
   const measured: Partial<TraitValues> = {
-    verbosity: clamp(12 * Math.log2(words + 1)), // ~0 words -> 0, ~300 words -> ~97
-    structure: clamp(listy ? 55 + listRatio * 120 : 20),
-    directness: clamp(50 + assertive * 10 - hedges * 10),
-    confidence: clamp(50 + assertive * 9 - hedges * 12),
-    warmth: clamp(35 + warm * 13),
-    playfulness: clamp(15 + playful * 14),
-    formality: clamp(55 - contractions * 9 + formalWords * 10),
-    proactivity: clamp(30 + proactive * 14),
+    // Openness: tentative/insight (exploratory, reflective) language and longer average words (Pennebaker & King, 1999).
+    openness: clamp(30 + tentative * 8 + insight * 6 + Math.max(0, wordLen - 4.2) * 12),
+    // Conscientiousness: achievement/work-goal language, penalized by negation (Yarkoni, 2010).
+    conscientiousness: clamp(40 + achievement * 11 - negation * 4),
+    // Extraversion: social words and positive emotion, penalized by tentative language (Pennebaker & King, 1999).
+    extraversion: clamp(35 + social * 8 + posEmotion * 6 - tentative * 5),
+    // Agreeableness: positive emotion and assent, penalized by negative emotion (Pennebaker & King, 1999; Park et al., 2015).
+    agreeableness: clamp(40 + posEmotion * 8 + assent * 9 - negEmotion * 9),
+    // Neuroticism: negative emotion, anxiety, and negation language (Pennebaker & King, 1999; Yarkoni, 2010).
+    neuroticism: clamp(30 + negEmotion * 10 + anxiety * 11 + negation * 4),
   };
   return measured;
 }

@@ -8,52 +8,23 @@ interface FaderProps {
   disabled?: boolean;
 }
 
-const TRACK_HEIGHT = 176;
+const TRACK_HEIGHT = 168;
+const TICKS = [0, 25, 50, 75, 100];
 
 export function Fader({ label, tag, leftLabel, rightLabel, value, onChange, disabled }: FaderProps) {
-  const deviated = Math.abs(value - 50) > 6;
-  const intensity = Math.min(1, Math.abs(value - 50) / 50);
-  const posFromBottom = (value / 100) * TRACK_HEIGHT;
-  const center = TRACK_HEIGHT / 2;
-  const fillBottom = value >= 50 ? center : posFromBottom;
-  const fillHeight = Math.abs(posFromBottom - center);
-
   return (
-    <div
-      className={`flex flex-col items-center gap-2 ${disabled ? "opacity-40" : ""}`}
-      style={{ width: 68 }}
-    >
-      <div className="font-mono text-xs tabular-nums text-(--color-text-mid)">
-        {value}
-      </div>
+    <div className={`flex flex-col items-center gap-1.5 ${disabled ? "opacity-50" : ""}`} style={{ width: 76 }}>
+      <div className="text-[10px] text-center leading-tight h-7">{rightLabel}</div>
 
-      <div className="flex flex-col items-center" style={{ height: TRACK_HEIGHT + 34 }}>
-        <div className="text-[9px] uppercase tracking-wide text-(--color-text-low) mb-1 h-6 text-center leading-tight">
-          {rightLabel}
+      <div className="flex items-center gap-1">
+        {/* tick marks, like a volume-control channel strip */}
+        <div className="flex flex-col justify-between" style={{ height: TRACK_HEIGHT }}>
+          {TICKS.map((t) => (
+            <div key={t} style={{ width: 5, height: 1, background: "var(--color-shadow)" }} />
+          ))}
         </div>
 
-        <div className="relative" style={{ height: TRACK_HEIGHT, width: 34 }}>
-          {/* groove */}
-          <div
-            className="absolute left-1/2 top-0 bottom-0 -translate-x-1/2 rounded-full"
-            style={{ width: 6, background: "var(--color-surface)", boxShadow: "inset 0 0 0 1px var(--color-border-strong)" }}
-          />
-          {/* center detent */}
-          <div
-            className="absolute left-1/2 -translate-x-1/2 rounded-full"
-            style={{ top: center - 1, width: 14, height: 2, background: "var(--color-border-strong)" }}
-          />
-          {/* fill from center toward current value */}
-          <div
-            className="absolute left-1/2 -translate-x-1/2 rounded-full"
-            style={{
-              bottom: fillBottom,
-              height: Math.max(2, fillHeight),
-              width: 6,
-              background: "var(--color-fill)",
-              opacity: 0.3 + intensity * 0.7,
-            }}
-          />
+        <div className="win-sunken relative" style={{ height: TRACK_HEIGHT, width: 20 }}>
           <input
             type="range"
             min={0}
@@ -69,22 +40,17 @@ export function Fader({ label, tag, leftLabel, rightLabel, value, onChange, disa
               top: "50%",
               left: "50%",
               width: TRACK_HEIGHT,
-              height: 30,
+              height: 20,
               transform: "translate(-50%, -50%) rotate(-90deg)",
             }}
           />
         </div>
-
-        <div className="text-[9px] uppercase tracking-wide text-(--color-text-low) mt-1 h-6 text-center leading-tight">
-          {leftLabel}
-        </div>
       </div>
 
-      <div
-        className={`label-eyebrow text-[11px] text-(--color-text) ${deviated ? "" : "opacity-40"}`}
-      >
-        {tag}
-      </div>
+      <div className="text-[10px] text-center leading-tight h-7">{leftLabel}</div>
+
+      <div className="font-mono text-[11px] tabular-nums">{value}</div>
+      <div className="text-[11px] font-bold">{tag}</div>
     </div>
   );
 }

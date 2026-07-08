@@ -38,8 +38,8 @@ function seedTracks(): Track[] {
       {
         name: "Professional",
         traits: {
-          warmth: 35, formality: 78, verbosity: 55, directness: 65,
-          structure: 72, proactivity: 50, playfulness: 15, confidence: 68,
+          openness: 35, conscientiousness: 78, extraversion: 42,
+          agreeableness: 55, neuroticism: 25,
         },
       },
       0,
@@ -48,8 +48,8 @@ function seedTracks(): Track[] {
       {
         name: "Efficient",
         traits: {
-          warmth: 30, formality: 50, verbosity: 8, directness: 82,
-          structure: 48, proactivity: 28, playfulness: 15, confidence: 75,
+          openness: 25, conscientiousness: 80, extraversion: 35,
+          agreeableness: 35, neuroticism: 20,
         },
       },
       1,
@@ -58,8 +58,8 @@ function seedTracks(): Track[] {
       {
         name: "Fact-Based",
         traits: {
-          warmth: 28, formality: 65, verbosity: 62, directness: 70,
-          structure: 66, proactivity: 48, playfulness: 8, confidence: 55,
+          openness: 45, conscientiousness: 75, extraversion: 30,
+          agreeableness: 35, neuroticism: 35,
         },
       },
       2,
@@ -68,8 +68,8 @@ function seedTracks(): Track[] {
       {
         name: "Exploratory",
         traits: {
-          warmth: 66, formality: 28, verbosity: 70, directness: 45,
-          structure: 40, proactivity: 70, playfulness: 68, confidence: 50,
+          openness: 78, conscientiousness: 35, extraversion: 72,
+          agreeableness: 68, neuroticism: 40,
         },
       },
       3,

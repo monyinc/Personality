@@ -1,22 +1,19 @@
 @import "tailwindcss";
 
 @theme {
-  --font-display: "Barlow Condensed", system-ui, sans-serif;
-  --font-body: "IBM Plex Sans", system-ui, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+  --font-ui: "MS Sans Serif", Tahoma, "Segoe UI", Arial, sans-serif;
+  --font-mono: ui-monospace, Consolas, "Courier New", monospace;
 
-  --color-bg: #ffffff;
-  --color-surface: #f6f6f6;
-  --color-surface-raised: #eeeeee;
-  --color-border: #dddddd;
-  --color-border-strong: #bbbbbb;
-
+  --color-face: #c0c0c0;
+  --color-face-light: #dfdfdf;
+  --color-well: #ffffff;
+  --color-shadow: #808080;
+  --color-shadow-dark: #000000;
+  --color-highlight: #ffffff;
+  --color-title-from: #000080;
+  --color-title-to: #1084d0;
+  --color-selection: #000080;
   --color-text: #000000;
-  --color-text-mid: #4d4d4d;
-  --color-text-low: #8a8a8a;
-
-  --color-fill: #000000;
-  --color-fill-muted: #cccccc;
 }
 
 :root {
@@ -24,6 +21,7 @@
 }
 
 * {
+  border-radius: 0 !important;
   box-sizing: border-box;
 }
 
@@ -31,43 +29,89 @@ html,
 body,
 #root {
   height: 100%;
+  background: var(--color-face);
+  overflow: hidden;
 }
 
 body {
   margin: 0;
-  background: var(--color-bg);
   color: var(--color-text);
-  font-family: var(--font-body);
-  font-size: 15px;
+  font-family: var(--font-ui);
+  font-size: 12px;
   -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
-  background: var(--color-text);
-  color: var(--color-bg);
+  background: var(--color-selection);
+  color: #ffffff;
 }
 
-.label-eyebrow {
-  font-family: var(--font-display);
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+input, textarea, button, select {
+  font-family: var(--font-ui);
+  font-size: 12px;
+  color: var(--color-text);
 }
 
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-border-strong) transparent;
-}
-*::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-*::-webkit-scrollbar-thumb {
-  background: var(--color-border-strong);
-  border-radius: 4px;
+input:focus-visible, textarea:focus-visible, button:focus-visible, select:focus-visible {
+  outline: 1px dotted #000000;
+  outline-offset: -3px;
 }
 
-/* fader thumb: a plain channel-strip cap, monochrome */
+/* classic Windows 98 3D bevels */
+.win-raised {
+  background: var(--color-face);
+  border: 2px outset var(--color-face);
+}
+.win-raised:active {
+  border-style: inset;
+}
+
+.win-sunken {
+  background: var(--color-well);
+  border: 2px inset var(--color-face);
+}
+
+.win-panel {
+  background: var(--color-face);
+  border: 2px outset var(--color-face);
+}
+
+.win-groovebox {
+  border: 2px groove var(--color-face);
+  background: var(--color-face);
+  position: relative;
+}
+.win-groovebox > .win-groovebox-label {
+  position: absolute;
+  top: -9px;
+  left: 8px;
+  background: var(--color-face);
+  padding: 0 4px;
+  font-weight: bold;
+}
+
+.win-scroll {
+  overflow: auto;
+}
+.win-scroll::-webkit-scrollbar {
+  width: 17px;
+  height: 17px;
+}
+.win-scroll::-webkit-scrollbar-track {
+  background: var(--color-face);
+}
+.win-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-face);
+  border: 2px outset var(--color-face);
+}
+.win-scroll::-webkit-scrollbar-button {
+  background: var(--color-face);
+  border: 2px outset var(--color-face);
+  width: 17px;
+  height: 17px;
+}
+
+/* volume-mixer style trackbar for the personality faders */
 .fader-input {
   -webkit-appearance: none;
   appearance: none;
@@ -91,26 +135,23 @@ body {
 }
 .fader-input::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 34px;
-  height: 18px;
-  border-radius: 3px;
-  background: #ffffff;
-  border: 1px solid var(--color-text);
-  box-shadow: inset 0 0 0 3px #ffffff, 0 0 0 1px var(--color-text);
-  margin-top: -7px;
+  width: 24px;
+  height: 12px;
+  background: var(--color-face);
+  border: 2px outset var(--color-face);
+  margin-top: -4px;
 }
 .fader-input::-moz-range-thumb {
-  width: 34px;
-  height: 18px;
-  border-radius: 3px;
-  background: #ffffff;
-  border: 1px solid var(--color-text);
+  width: 24px;
+  height: 12px;
+  background: var(--color-face);
+  border: 2px outset var(--color-face);
 }
-.fader-input:focus-visible::-webkit-slider-thumb {
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.15);
+.fader-input:active::-webkit-slider-thumb {
+  border-style: inset;
 }
-.fader-input:focus-visible::-moz-range-thumb {
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.15);
+.fader-input:active::-moz-range-thumb {
+  border-style: inset;
 }
 
 @media (prefers-reduced-motion: reduce) {

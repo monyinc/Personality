@@ -1,6 +1,7 @@
 import { useStudioStore } from "../../store/useStudioStore";
 import { PROVIDER_META } from "../../lib/providers";
 import type { ProviderId } from "../../types";
+import { GroupBox } from "../Shell/GroupBox";
 
 export function SettingsModal() {
   const open = useStudioStore((s) => s.settingsOpen);
@@ -11,25 +12,24 @@ export function SettingsModal() {
   if (!open) return null;
 
   return (
-    <div
-      className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4"
-      onClick={close}
-    >
+    <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50 p-4" onClick={close}>
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-lg bg-(--color-bg) border border-(--color-border-strong) rounded-sm shadow-2xl"
+        className="win-panel w-full max-w-lg"
+        style={{ boxShadow: "2px 2px 8px rgba(0,0,0,0.5)" }}
       >
-        <div className="flex items-center justify-between px-5 py-3.5 border-b border-(--color-border)">
-          <h2 className="font-display text-lg font-semibold uppercase tracking-wide">
-            Provider keys
-          </h2>
-          <button onClick={close} className="text-(--color-text-low) hover:text-(--color-text) cursor-pointer text-[11px] underline underline-offset-2">
-            Close
+        <div
+          className="flex items-center justify-between h-[26px] px-1.5"
+          style={{ background: "linear-gradient(90deg, var(--color-title-from), var(--color-title-to))" }}
+        >
+          <span className="text-white text-[12px] font-bold">Provider keys</span>
+          <button onClick={close} className="win-raised w-[18px] h-[16px] text-[10px] leading-none font-bold cursor-pointer">
+            &#10005;
           </button>
         </div>
 
-        <div className="px-5 py-4 space-y-5 max-h-[70vh] overflow-auto">
-          <p className="text-[12px] text-(--color-text-mid) leading-relaxed">
+        <div className="p-3 space-y-3 max-h-[70vh] overflow-auto">
+          <p className="text-[11px] leading-relaxed">
             Keys are stored only in this browser's local storage and sent directly from your
             browser to each provider's API, never through any server of ours (this app has none,
             it's static).
@@ -39,38 +39,29 @@ export function SettingsModal() {
             const meta = PROVIDER_META[p];
             const cfg = providerSettings[p];
             return (
-              <div key={p} className="border border-(--color-border) rounded-sm p-3.5">
-                <div className="flex items-baseline justify-between mb-2">
-                  <span className="font-display font-semibold uppercase tracking-wide text-[13px]">
-                    {meta.label}
-                  </span>
-                </div>
-                <p className="text-[11px] text-(--color-text-low) mb-2.5">{meta.corsNote}</p>
+              <GroupBox key={p} label={meta.label} className="mt-0">
+                <p className="text-[11px] mb-2 mt-1">{meta.corsNote}</p>
                 <label className="block mb-2">
-                  <span className="block text-[10px] label-eyebrow text-(--color-text-low) mb-1">
-                    API key
-                  </span>
+                  <span className="block text-[10px] font-bold mb-1">API key</span>
                   <input
                     type="password"
                     value={cfg.apiKey}
                     onChange={(e) => setProviderConfig(p, { apiKey: e.target.value })}
                     placeholder={meta.keyPlaceholder}
-                    className="w-full bg-(--color-bg) border border-(--color-border) rounded-sm px-2.5 py-1.5 text-[12.5px] font-mono outline-none focus:border-(--color-text)"
+                    className="win-sunken w-full px-1.5 py-1 text-[12px] font-mono"
                   />
                 </label>
                 <label className="block">
-                  <span className="block text-[10px] label-eyebrow text-(--color-text-low) mb-1">
-                    Model
-                  </span>
+                  <span className="block text-[10px] font-bold mb-1">Model</span>
                   <input
                     value={cfg.model}
                     onChange={(e) => setProviderConfig(p, { model: e.target.value })}
                     placeholder={meta.modelHint}
-                    className="w-full bg-(--color-bg) border border-(--color-border) rounded-sm px-2.5 py-1.5 text-[12.5px] font-mono outline-none focus:border-(--color-text)"
+                    className="win-sunken w-full px-1.5 py-1 text-[12px] font-mono"
                   />
                 </label>
-                <p className="text-[10px] text-(--color-text-low) mt-1">{meta.modelHint}</p>
-              </div>
+                <p className="text-[10px] mt-1">{meta.modelHint}</p>
+              </GroupBox>
             );
           })}
         </div>

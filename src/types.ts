@@ -1,12 +1,9 @@
 export type TraitId =
-  | "warmth"
-  | "formality"
-  | "verbosity"
-  | "directness"
-  | "structure"
-  | "proactivity"
-  | "playfulness"
-  | "confidence";
+  | "openness"
+  | "conscientiousness"
+  | "extraversion"
+  | "agreeableness"
+  | "neuroticism";
 
 export type TraitValues = Record<TraitId, number>;
 
