@@ -136,7 +136,7 @@ interface StudioState {
   setActiveTrack: (id: string) => void;
   updateTrait: (id: string, trait: TraitId, value: number) => void;
   resetTraits: (id: string) => void;
-  toggleManualOverride: (id: string) => void;
+  toggleManualOverride: (id: string, seedPrompt?: string) => void;
   setManualPrompt: (id: string, text: string) => void;
 
   setProviderConfig: (provider: ProviderId, patch: Partial<{ apiKey: string; model: string }>) => void;
@@ -215,11 +215,19 @@ export const useStudioStore = create<StudioState>()(
           ),
         });
       },
-      toggleManualOverride: (id) => {
+      toggleManualOverride: (id, seedPrompt) => {
         set({
-          tracks: get().tracks.map((t) =>
-            t.id === id ? { ...t, manualOverride: !t.manualOverride } : t,
-          ),
+          tracks: get().tracks.map((t) => {
+            if (t.id !== id) return t;
+            const turningOn = !t.manualOverride;
+            return {
+              ...t,
+              manualOverride: turningOn,
+              // Seed with the current generated prompt so the stored text always
+              // matches what's on screen, rather than staying "" until the next keystroke.
+              manualPrompt: turningOn && !t.manualPrompt ? (seedPrompt ?? "") : t.manualPrompt,
+            };
+          }),
         });
       },
       setManualPrompt: (id, text) => {

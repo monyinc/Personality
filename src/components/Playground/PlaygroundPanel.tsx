@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useStudioStore, emptyRunResult } from "../../store/useStudioStore";
-import { generateSystemPrompt } from "../../lib/traits";
+import { effectiveSystemPrompt } from "../../lib/traits";
 import { callProvider, PROVIDER_META } from "../../lib/providers";
 import type { ProviderId, Track } from "../../types";
 import { ResultCard } from "./ResultCard";
@@ -43,12 +43,7 @@ export function PlaygroundPanel() {
     setRunning(true);
     const cfg = providerSettings[selectedProvider];
     const initial = targetTracks.map((t) =>
-      emptyRunResult(
-        t,
-        t.manualOverride ? t.manualPrompt : generateSystemPrompt(t.name, t.traits),
-        selectedProvider,
-        cfg.model,
-      ),
+      emptyRunResult(t, effectiveSystemPrompt(t), selectedProvider, cfg.model),
     );
     setResults(initial);
 

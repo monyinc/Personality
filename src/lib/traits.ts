@@ -177,3 +177,15 @@ export function generateSystemPrompt(name: string, traits: TraitValues): string 
   }
   return `${header}\n\n${fragments.map((f) => `- ${f}`).join("\n")}`;
 }
+
+/**
+ * The single source of truth for "what prompt does this track actually send."
+ * Manual-override tracks fall back to the generated prompt until the person
+ * has actually typed something, so the notepad, the copy button, and a live
+ * run never disagree about what's in effect.
+ */
+export function effectiveSystemPrompt(track: { name: string; traits: TraitValues; manualOverride: boolean; manualPrompt: string }): string {
+  const generated = generateSystemPrompt(track.name, track.traits);
+  if (!track.manualOverride) return generated;
+  return track.manualPrompt || generated;
+}

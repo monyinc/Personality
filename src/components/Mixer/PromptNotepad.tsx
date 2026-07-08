@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useStudioStore } from "../../store/useStudioStore";
-import { generateSystemPrompt } from "../../lib/traits";
+import { effectiveSystemPrompt, generateSystemPrompt } from "../../lib/traits";
 import type { Track } from "../../types";
 import { Icon } from "../Shell/Icon";
 
@@ -13,7 +13,7 @@ export function PromptNotepad({ track }: { track: Track }) {
     () => generateSystemPrompt(track.name, track.traits),
     [track.name, track.traits],
   );
-  const effectivePrompt = track.manualOverride ? track.manualPrompt : generated;
+  const effectivePrompt = effectiveSystemPrompt(track);
 
   function handleCopy() {
     navigator.clipboard.writeText(effectivePrompt).then(() => {
@@ -39,7 +39,11 @@ export function PromptNotepad({ track }: { track: Track }) {
         style={{ borderBottom: "1px solid var(--color-shadow)" }}
       >
         <label className="flex items-center gap-1.5 cursor-pointer select-none">
-          <input type="checkbox" checked={track.manualOverride} onChange={() => toggleManualOverride(track.id)} />
+          <input
+            type="checkbox"
+            checked={track.manualOverride}
+            onChange={() => toggleManualOverride(track.id, generated)}
+          />
           Edit as text
         </label>
         <button onClick={handleCopy} className="win-raised px-2 py-0.5 ml-auto cursor-pointer">
@@ -49,7 +53,7 @@ export function PromptNotepad({ track }: { track: Track }) {
 
       {track.manualOverride ? (
         <textarea
-          value={track.manualPrompt || generated}
+          value={effectivePrompt}
           onChange={(e) => setManualPrompt(track.id, e.target.value)}
           className="win-sunken flex-1 m-1.5 resize-none px-2 py-1.5 font-mono text-[12px] leading-relaxed"
         />
