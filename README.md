@@ -1,6 +1,6 @@
 Personality
 
-Micro research project by usemony.com
+Research by usemony.com
 
 A Windows 98-styled mixer for tuning an AI's system-prompt personality. Five
 dials, taken from the Big Five (Five-Factor Model), generate a system prompt
