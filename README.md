@@ -1,4 +1,4 @@
-# Personality Studio
+# Personality
 
 A GarageBand-style studio for tuning an AI's system-prompt "personality": mix
 behavioral traits on faders, audition the result live against a real model,

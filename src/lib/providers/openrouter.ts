@@ -15,7 +15,7 @@ export async function callOpenRouter({
         "content-type": "application/json",
         authorization: `Bearer ${apiKey}`,
         "HTTP-Referer": window.location.origin,
-        "X-Title": "Personality Studio",
+        "X-Title": "Personality",
       },
       body: JSON.stringify({
         model,

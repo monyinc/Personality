@@ -14,7 +14,7 @@ export default function App() {
     <div className="h-screen w-screen flex flex-col bg-(--color-bg) text-(--color-text)">
       <header className="flex items-center gap-3 px-4 h-12 border-b border-(--color-border-strong) bg-(--color-surface) shrink-0">
         <h1 className="font-display text-[17px] font-semibold uppercase tracking-[0.12em]">
-          Personality Studio
+          Personality
         </h1>
         <span className="text-[11px] text-(--color-text-low) font-mono ml-1 hidden sm:inline">
           tune, audition, and A/B test AI system prompts
