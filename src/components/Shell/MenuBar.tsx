@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import { Icon } from "./Icon";
 
 export interface MenuItem {
   label: string;
+  icon?: string;
   onClick?: () => void;
   disabled?: boolean;
   separator?: boolean;
@@ -62,7 +64,7 @@ export function MenuBar({ menus }: { menus: Menu[] }) {
                       item.onClick?.();
                       setOpen(null);
                     }}
-                    className="w-full text-left px-4 py-1 text-[12px] cursor-default"
+                    className="w-full text-left pl-2 pr-4 py-1 text-[12px] cursor-default flex items-center gap-2"
                     style={item.disabled ? { color: "rgba(0,0,0,0.35)" } : undefined}
                     onMouseEnter={(e) => {
                       if (!item.disabled) {
@@ -75,6 +77,9 @@ export function MenuBar({ menus }: { menus: Menu[] }) {
                       e.currentTarget.style.color = item.disabled ? "rgba(0,0,0,0.35)" : "";
                     }}
                   >
+                    <span className="w-4 shrink-0 flex justify-center">
+                      {item.icon && <Icon name={item.icon} size={14} />}
+                    </span>
                     {item.label}
                   </button>
                 ),

@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# full icon pack dumped at the repo root for picking from; only the
+# curated set actually used gets copied into public/icons and committed
+/png
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

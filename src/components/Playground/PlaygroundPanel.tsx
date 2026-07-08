@@ -4,7 +4,9 @@ import { generateSystemPrompt } from "../../lib/traits";
 import { callProvider, PROVIDER_META } from "../../lib/providers";
 import type { ProviderId, Track } from "../../types";
 import { ResultCard } from "./ResultCard";
+import { ComparisonPicker } from "./ComparisonPicker";
 import { GroupBox } from "../Shell/GroupBox";
+import { Icon } from "../Shell/Icon";
 
 type Mode = "single" | "multitrack";
 
@@ -108,18 +110,17 @@ export function PlaygroundPanel() {
               </option>
             ))}
           </select>
-          <button onClick={openSettings} className="win-raised px-2.5 py-1 text-[11px] cursor-pointer">
+          <button onClick={openSettings} className="win-raised px-2.5 py-1 text-[11px] cursor-pointer flex items-center gap-1.5">
+            <Icon name="keys" />
             Provider keys
           </button>
-
-          {mode === "multitrack" && (
-            <span className="text-[11px]">
-              {comparisonTrackIds.length === 0
-                ? 'Mark tracks with the "AB" button in the sidebar to include them here.'
-                : `Comparing ${comparisonTrackIds.length} track${comparisonTrackIds.length > 1 ? "s" : ""}.`}
-            </span>
-          )}
         </div>
+
+        {mode === "multitrack" && (
+          <div className="pb-2">
+            <ComparisonPicker />
+          </div>
+        )}
 
         <div className="flex flex-wrap gap-1.5 pb-2">
           {scenarios.map((s) => (
@@ -151,8 +152,9 @@ export function PlaygroundPanel() {
             <button
               onClick={run}
               disabled={isRunning || !message.trim() || targetTracks.length === 0}
-              className="win-raised px-4 py-1.5 text-[12px] font-bold disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+              className="win-raised px-4 py-1.5 text-[12px] font-bold disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer flex items-center gap-1.5"
             >
+              <Icon name="run" />
               {isRunning ? "Running" : "Run"}
             </button>
             {customMessage.trim() && (

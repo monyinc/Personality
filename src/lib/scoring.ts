@@ -116,3 +116,24 @@ export function compareTraits(intended: TraitValues, text: string): TraitReading
     return { id, intended: intended[id], measured: m, delta: m - intended[id] };
   });
 }
+
+export interface AffectCategory {
+  label: string;
+  count: number;
+}
+
+/** Raw LIWC-style category counts behind the Big Five estimate above, for the affect chart. */
+export function measureAffectCategories(text: string): AffectCategory[] {
+  const lower = text.toLowerCase();
+  return [
+    { label: "Positive emotion", count: countHits(lower, POSITIVE_EMOTION) },
+    { label: "Negative emotion", count: countHits(lower, NEGATIVE_EMOTION) },
+    { label: "Anxiety", count: countHits(lower, ANXIETY) },
+    { label: "Social", count: countHits(lower, SOCIAL) },
+    { label: "Assent", count: countHits(lower, ASSENT) },
+    { label: "Achievement", count: countHits(lower, ACHIEVEMENT) },
+    { label: "Negation", count: countHits(lower, NEGATION) },
+    { label: "Tentative", count: countHits(lower, TENTATIVE) },
+    { label: "Insight", count: countHits(lower, INSIGHT) },
+  ];
+}

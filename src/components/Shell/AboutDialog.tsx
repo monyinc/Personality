@@ -1,3 +1,5 @@
+import { Icon } from "./Icon";
+
 export function AboutDialog({ onClose }: { onClose: () => void }) {
   return (
     <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-50" onClick={onClose}>
@@ -7,18 +9,24 @@ export function AboutDialog({ onClose }: { onClose: () => void }) {
         style={{ boxShadow: "2px 2px 8px rgba(0,0,0,0.5)" }}
       >
         <div
-          className="flex items-center justify-between h-[26px] px-1.5"
+          className="flex items-center gap-1.5 justify-between h-[26px] px-1.5"
           style={{
             background: "linear-gradient(90deg, var(--color-title-from), var(--color-title-to))",
           }}
         >
-          <span className="text-white text-[12px] font-bold">About Personality</span>
+          <span className="flex items-center gap-1.5 text-white text-[12px] font-bold">
+            <Icon name="help" size={14} />
+            About Personality
+          </span>
           <button onClick={onClose} className="win-raised w-[18px] h-[16px] text-[10px] leading-none font-bold cursor-pointer">
             &#10005;
           </button>
         </div>
 
         <div className="p-4 space-y-3 text-[12px] leading-relaxed">
+          <div className="flex justify-center mb-1">
+            <Icon name="app" size={32} />
+          </div>
           <p>
             Personality mixes an AI's system-prompt behavior on five dials taken
             from the Big Five (Five-Factor Model), the personality-psychology

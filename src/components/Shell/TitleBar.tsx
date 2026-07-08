@@ -1,3 +1,5 @@
+import { Icon } from "./Icon";
+
 export function TitleBar() {
   return (
     <div
@@ -8,11 +10,7 @@ export function TitleBar() {
       }}
     >
       <div className="flex items-center gap-1.5">
-        <span
-          aria-hidden
-          className="inline-block w-[14px] h-[14px]"
-          style={{ background: "var(--color-face)", border: "2px outset var(--color-face)" }}
-        />
+        <Icon name="app" size={16} />
         <span className="text-white text-[13px] font-bold tracking-tight">Personality</span>
       </div>
       <div className="flex gap-[2px]">

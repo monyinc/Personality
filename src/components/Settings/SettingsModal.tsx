@@ -2,6 +2,7 @@ import { useStudioStore } from "../../store/useStudioStore";
 import { PROVIDER_META } from "../../lib/providers";
 import type { ProviderId } from "../../types";
 import { GroupBox } from "../Shell/GroupBox";
+import { Icon } from "../Shell/Icon";
 
 export function SettingsModal() {
   const open = useStudioStore((s) => s.settingsOpen);
@@ -22,7 +23,10 @@ export function SettingsModal() {
           className="flex items-center justify-between h-[26px] px-1.5"
           style={{ background: "linear-gradient(90deg, var(--color-title-from), var(--color-title-to))" }}
         >
-          <span className="text-white text-[12px] font-bold">Provider keys</span>
+          <span className="flex items-center gap-1.5 text-white text-[12px] font-bold">
+            <Icon name="keys" size={14} />
+            Provider keys
+          </span>
           <button onClick={close} className="win-raised w-[18px] h-[16px] text-[10px] leading-none font-bold cursor-pointer">
             &#10005;
           </button>

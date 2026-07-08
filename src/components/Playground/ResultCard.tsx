@@ -1,9 +1,14 @@
+import { useState } from "react";
 import { useStudioStore } from "../../store/useStudioStore";
 import type { RunResult } from "../../types";
 import { TraitReadout } from "./TraitReadout";
+import { TraitRadar } from "./TraitRadar";
+import { AffectChart } from "./AffectChart";
+import { Icon } from "../Shell/Icon";
 
 export function ResultCard({ result }: { result: RunResult }) {
   const setRating = useStudioStore((s) => s.setRating);
+  const [showChart, setShowChart] = useState(false);
 
   return (
     <div className="win-panel flex flex-col min-w-0">
@@ -33,7 +38,21 @@ export function ResultCard({ result }: { result: RunResult }) {
           {result.manualOverride ? (
             <p className="text-[11px]">Hand-edited prompt, no dial readout to compare against.</p>
           ) : (
-            <TraitReadout traits={result.traits} text={result.text} />
+            <>
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-[10px] font-bold">Trait readout</span>
+                <button onClick={() => setShowChart((v) => !v)} className="win-raised px-1.5 py-0.5 text-[10px] cursor-pointer">
+                  {showChart ? "Hide chart" : "Show chart"}
+                </button>
+              </div>
+              <TraitReadout traits={result.traits} text={result.text} />
+              {showChart && (
+                <div className="mt-2 grid gap-2" style={{ gridTemplateColumns: "auto 1fr" }}>
+                  <TraitRadar traits={result.traits} text={result.text} />
+                  <AffectChart text={result.text} />
+                </div>
+              )}
+            </>
           )}
         </div>
       )}
@@ -42,16 +61,18 @@ export function ResultCard({ result }: { result: RunResult }) {
         <div className="flex items-center gap-2 px-2 pb-2">
           <button
             onClick={() => setRating(result.trackId, { vote: result.rating.vote === "up" ? null : "up" })}
-            className="win-raised px-2 py-0.5 text-[11px] cursor-pointer"
+            className="win-raised px-2 py-0.5 text-[11px] cursor-pointer flex items-center gap-1"
             style={result.rating.vote === "up" ? { borderStyle: "inset" } : undefined}
           >
+            <Icon name="good" size={12} />
             Good
           </button>
           <button
             onClick={() => setRating(result.trackId, { vote: result.rating.vote === "down" ? null : "down" })}
-            className="win-raised px-2 py-0.5 text-[11px] cursor-pointer"
+            className="win-raised px-2 py-0.5 text-[11px] cursor-pointer flex items-center gap-1"
             style={result.rating.vote === "down" ? { borderStyle: "inset" } : undefined}
           >
+            <Icon name="bad" size={12} />
             Bad
           </button>
           <input
