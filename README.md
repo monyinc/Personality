@@ -4,7 +4,7 @@ A Windows 98-styled mixer for tuning an AI's system-prompt personality. Five
 dials, taken from the Big Five (Five-Factor Model), generate a system prompt
 live; a Notepad-style panel beside them shows the exact prompt in effect; and
 a playground lets you audition it, or A/B up to four tracks at once, against
-a real model. Runs entirely client-side, no backend: bring your own API key.
+a real model. 
 
 ## What's in it
 
