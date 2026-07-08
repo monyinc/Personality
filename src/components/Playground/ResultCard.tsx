@@ -9,6 +9,7 @@ import { Icon } from "../Shell/Icon";
 export function ResultCard({ result }: { result: RunResult }) {
   const setRating = useStudioStore((s) => s.setRating);
   const [showChart, setShowChart] = useState(false);
+  const [showPrompt, setShowPrompt] = useState(false);
 
   return (
     <div className="win-panel flex flex-col min-w-0">
@@ -24,6 +25,23 @@ export function ResultCard({ result }: { result: RunResult }) {
           {result.latencyMs != null ? ` (${(result.latencyMs / 1000).toFixed(1)}s)` : ""}
         </span>
       </div>
+
+      <div className="flex items-center justify-between px-2 pt-1.5">
+        <span className="text-[10px]">
+          {result.manualOverride ? "Hand-edited prompt" : "Generated prompt"}
+        </span>
+        <button
+          onClick={() => setShowPrompt((v) => !v)}
+          className="win-raised px-1.5 py-0.5 text-[10px] cursor-pointer"
+        >
+          {showPrompt ? "Hide prompt used" : "View prompt used"}
+        </button>
+      </div>
+      {showPrompt && (
+        <pre className="win-sunken mx-2 mt-1 mb-0 px-2 py-1.5 font-mono text-[11px] leading-relaxed whitespace-pre-wrap max-h-32 overflow-auto">
+          {result.systemPrompt}
+        </pre>
+      )}
 
       <div className="win-sunken m-1.5 px-2 py-1.5 min-h-24">
         {result.status === "pending" && <p className="text-[12px] animate-pulse">Recording take</p>}

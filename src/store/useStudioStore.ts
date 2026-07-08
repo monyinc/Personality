@@ -203,7 +203,15 @@ export const useStudioStore = create<StudioState>()(
         set({
           tracks: get().tracks.map((t) =>
             t.id === id
-              ? { ...t, traits: { ...t.traits, [trait]: value }, updatedAt: Date.now() }
+              ? {
+                  ...t,
+                  traits: { ...t.traits, [trait]: value },
+                  // A dial move makes any saved hand-edit stale (it was a draft of the
+                  // *old* generated prompt) — clear it so re-entering text mode seeds
+                  // fresh from the current dials instead of resurrecting old text.
+                  manualPrompt: "",
+                  updatedAt: Date.now(),
+                }
               : t,
           ),
         });
@@ -211,7 +219,9 @@ export const useStudioStore = create<StudioState>()(
       resetTraits: (id) => {
         set({
           tracks: get().tracks.map((t) =>
-            t.id === id ? { ...t, traits: defaultTraitValues(), updatedAt: Date.now() } : t,
+            t.id === id
+              ? { ...t, traits: defaultTraitValues(), manualPrompt: "", updatedAt: Date.now() }
+              : t,
           ),
         });
       },
