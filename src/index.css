@@ -1,0 +1,151 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Barlow Condensed", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --color-console: #1c1a18;
+  --color-console-raised: #221f1c;
+  --color-panel: #262320;
+  --color-panel-raised: #302c27;
+  --color-hairline: #3a352f;
+  --color-hairline-bright: #4a443c;
+
+  --color-text-hi: #f2ede4;
+  --color-text-mid: #c7bfaf;
+  --color-text-low: #8a8275;
+
+  --color-amber: #e8a23d;
+  --color-amber-dim: #a97530;
+  --color-teal: #4fb0a5;
+  --color-teal-dim: #386e67;
+  --color-red: #e5484d;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-console);
+  color: var(--color-text-hi);
+  font-family: var(--font-body);
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-amber);
+  color: var(--color-console);
+}
+
+/* subtle brushed-metal grain on the console background */
+.console-grain {
+  background-image:
+    radial-gradient(circle at 15% 10%, rgba(232, 162, 61, 0.05), transparent 40%),
+    radial-gradient(circle at 85% 90%, rgba(79, 176, 165, 0.05), transparent 40%),
+    repeating-linear-gradient(
+      170deg,
+      rgba(255, 255, 255, 0.012) 0px,
+      rgba(255, 255, 255, 0.012) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+}
+
+.label-eyebrow {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* scrollbars fit the console aesthetic */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-hairline-bright) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-hairline-bright);
+  border-radius: 4px;
+}
+
+/* hardware-style fader thumb: a channel-strip cap, not a browser default */
+.fader-input {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: ns-resize;
+  touch-action: none;
+}
+.fader-input:disabled {
+  cursor: not-allowed;
+}
+.fader-input:focus-visible {
+  outline: none;
+}
+.fader-input::-webkit-slider-runnable-track {
+  height: 4px;
+  background: transparent;
+}
+.fader-input::-moz-range-track {
+  height: 4px;
+  background: transparent;
+}
+.fader-input::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 34px;
+  height: 18px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #524b41 0%, #322d27 55%, #221f1c 100%);
+  border: 1px solid var(--color-hairline-bright);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -6px 0 -4px rgba(0, 0, 0, 0.4);
+  margin-top: -7px;
+}
+.fader-input::-moz-range-thumb {
+  width: 34px;
+  height: 18px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #524b41 0%, #322d27 55%, #221f1c 100%);
+  border: 1px solid var(--color-hairline-bright);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+.fader-input:focus-visible::-webkit-slider-thumb {
+  border-color: var(--color-amber);
+  box-shadow:
+    0 0 0 3px rgba(232, 162, 61, 0.35),
+    0 1px 3px rgba(0, 0, 0, 0.6);
+}
+.fader-input:focus-visible::-moz-range-thumb {
+  border-color: var(--color-amber);
+  box-shadow: 0 0 0 3px rgba(232, 162, 61, 0.35);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
