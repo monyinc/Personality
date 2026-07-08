@@ -296,6 +296,19 @@ export const useStudioStore = create<StudioState>()(
     }),
     {
       name: "personality-studio",
+      version: 1,
+      // v0 -> v1: manual-edit drafts used to be preserved forever, even after
+      // the dials that generated them had since changed, so a track's saved
+      // manualPrompt could silently disagree with its current dial positions.
+      // One-time cleanup so anyone's existing browser storage self-heals
+      // instead of requiring them to nudge a dial to notice the fix.
+      migrate: (persisted, version) => {
+        const state = persisted as Partial<StudioState> & { tracks?: Track[] };
+        if (version < 1 && state.tracks) {
+          state.tracks = state.tracks.map((t) => ({ ...t, manualOverride: false, manualPrompt: "" }));
+        }
+        return state as StudioState;
+      },
       partialize: (state) => ({
         tracks: state.tracks,
         activeTrackId: state.activeTrackId,
