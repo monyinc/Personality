@@ -16,6 +16,10 @@ dist-ssr
 # curated set actually used gets copied into public/icons and committed
 /png
 
+# original full-size favicon source dropped at the repo root; the
+# resized versions actually used live in public/ and are committed
+/favicon.png
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

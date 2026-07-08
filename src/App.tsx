@@ -9,6 +9,7 @@ import { TitleBar } from "./components/Shell/TitleBar";
 import { MenuBar, type Menu } from "./components/Shell/MenuBar";
 import { StatusBar } from "./components/Shell/StatusBar";
 import { AboutDialog } from "./components/Shell/AboutDialog";
+import { FooterLinks } from "./components/Shell/FooterLinks";
 
 export default function App() {
   const tracks = useStudioStore((s) => s.tracks);
@@ -72,7 +73,10 @@ export default function App() {
         </main>
       </div>
 
-      <StatusBar left={activeTrack ? `Track: ${activeTrack.name}` : "No track selected"} />
+      <StatusBar
+        left={activeTrack ? `Track: ${activeTrack.name}` : "No track selected"}
+        right={<FooterLinks />}
+      />
 
       <SettingsModal />
       {aboutOpen && <AboutDialog onClose={() => setAboutOpen(false)} />}
