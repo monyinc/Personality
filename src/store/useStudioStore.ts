@@ -138,6 +138,7 @@ interface StudioState {
   resetTraits: (id: string) => void;
   toggleManualOverride: (id: string, seedPrompt?: string) => void;
   setManualPrompt: (id: string, text: string) => void;
+  applyOptimizedPrompt: (id: string, text: string) => void;
 
   setProviderConfig: (provider: ProviderId, patch: Partial<{ apiKey: string; model: string }>) => void;
   setSelectedProvider: (provider: ProviderId) => void;
@@ -244,6 +245,19 @@ export const useStudioStore = create<StudioState>()(
         set({
           tracks: get().tracks.map((t) =>
             t.id === id ? { ...t, manualPrompt: text, updatedAt: Date.now() } : t,
+          ),
+        });
+      },
+      // An optimized prompt rides the existing manual-override rails: the
+      // notepad becomes editable, the playground picks it up through
+      // effectiveSystemPrompt, and a later dial move marks it stale exactly
+      // like a hand-edit.
+      applyOptimizedPrompt: (id, text) => {
+        set({
+          tracks: get().tracks.map((t) =>
+            t.id === id
+              ? { ...t, manualOverride: true, manualPrompt: text, updatedAt: Date.now() }
+              : t,
           ),
         });
       },

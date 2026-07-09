@@ -1,13 +1,28 @@
 import { useMemo, useState } from "react";
 import { useStudioStore } from "../../store/useStudioStore";
-import { effectiveSystemPrompt, generateSystemPrompt } from "../../lib/traits";
+import { effectiveSystemPrompt, generateSystemPrompt, TRAITS } from "../../lib/traits";
+import { optimizeTrackPrompt, type OptimizeProgress } from "../../lib/optimizer";
+import { PROVIDER_META } from "../../lib/providers";
 import type { Track } from "../../types";
 import { Icon } from "../Shell/Icon";
+
+const PHASE_LABELS: Record<OptimizeProgress["phase"], string> = {
+  drafting: "drafting prompt",
+  auditioning: "auditioning take",
+  scoring: "scoring traits",
+};
 
 export function PromptNotepad({ track }: { track: Track }) {
   const toggleManualOverride = useStudioStore((s) => s.toggleManualOverride);
   const setManualPrompt = useStudioStore((s) => s.setManualPrompt);
+  const applyOptimizedPrompt = useStudioStore((s) => s.applyOptimizedPrompt);
+  const selectedProvider = useStudioStore((s) => s.selectedProvider);
+  const providerSettings = useStudioStore((s) => s.providerSettings);
+  const results = useStudioStore((s) => s.results);
   const [copied, setCopied] = useState(false);
+  const [optimizing, setOptimizing] = useState(false);
+  const [optimizeStatus, setOptimizeStatus] = useState("");
+  const [optimizeError, setOptimizeError] = useState("");
 
   const generated = useMemo(
     () => generateSystemPrompt(track.name, track.traits),
@@ -20,6 +35,35 @@ export function PromptNotepad({ track }: { track: Track }) {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
     });
+  }
+
+  async function handleOptimize() {
+    if (optimizing) return;
+    setOptimizing(true);
+    setOptimizeError("");
+    setOptimizeStatus("Starting…");
+    try {
+      const outcome = await optimizeTrackPrompt({
+        provider: selectedProvider,
+        config: providerSettings[selectedProvider],
+        track,
+        ratedTakes: results.filter((r) => r.trackId === track.id && r.status === "done"),
+        onProgress: (p) =>
+          setOptimizeStatus(`Round ${p.round}/${p.maxRounds} · ${PHASE_LABELS[p.phase]}…`),
+      });
+      applyOptimizedPrompt(track.id, outcome.prompt);
+      const drift = outcome.readings
+        .map((r) => `${TRAITS[r.id].tag} ${r.delta > 0 ? "+" : ""}${r.delta}`)
+        .join("  ");
+      setOptimizeStatus(
+        `${outcome.converged ? "Converged" : "Best of"} ${outcome.rounds} round${outcome.rounds > 1 ? "s" : ""} · drift ${drift}`,
+      );
+    } catch (err) {
+      setOptimizeStatus("");
+      setOptimizeError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setOptimizing(false);
+    }
   }
 
   return (
@@ -46,10 +90,28 @@ export function PromptNotepad({ track }: { track: Track }) {
           />
           Edit as text
         </label>
-        <button onClick={handleCopy} className="win-raised px-2 py-0.5 ml-auto cursor-pointer">
+        <button
+          onClick={handleOptimize}
+          disabled={optimizing}
+          title={`Have ${PROVIDER_META[selectedProvider].label} write, audition, and refine this prompt against the dial targets`}
+          className="win-raised px-2 py-0.5 ml-auto cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed flex items-center gap-1"
+        >
+          <Icon name="run" size={12} />
+          {optimizing ? "Optimizing…" : "Optimize"}
+        </button>
+        <button onClick={handleCopy} className="win-raised px-2 py-0.5 cursor-pointer">
           {copied ? "Copied" : "Copy"}
         </button>
       </div>
+
+      {(optimizeStatus || optimizeError) && (
+        <div
+          className="px-2 py-1 shrink-0 text-[10px]"
+          style={{ borderBottom: "1px solid var(--color-shadow)", color: optimizeError ? "var(--color-error, #a00)" : undefined }}
+        >
+          {optimizeError || optimizeStatus}
+        </div>
+      )}
 
       {track.manualOverride ? (
         <textarea
